@@ -8,6 +8,7 @@
 		"build": "tsc",
 		"start": "node --require dotenv/config dist/index.js",
 		"migrate": "npx sequelize-cli db:migrate",
+		"migrate:prod": "cross-env NODE_ENV=production npx sequelize-cli db:migrate",
 		"migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate && npm run seed",
 		"migrate:down": "npx sequelize-cli db:migrate:undo:all",
 		"migrate:undo": "npx sequelize-cli db:migrate:undo",

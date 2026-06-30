@@ -8,7 +8,9 @@ let db_uri: string = "";
 const APP_MODE: string =
 	process.env.NODE_ENV === "test"
 		? "test"
-		: process.env.DEV_MODE || "development";
+		: process.env.NODE_ENV === "production"
+			? "production"
+			: process.env.DEV_MODE || "development";
 const DB_HOST_MODE: string = process.env.DB_HOSTED_MODE || "local";
 
 switch (APP_MODE) {
@@ -28,8 +30,8 @@ const dialect_option = isLocal
 	? {}
 	: {
 			ssl: {
-				require: process.env.SSL,
-				rejectUnauthorized: true,
+				require: true,
+				rejectUnauthorized: false,
 			},
 		};
 

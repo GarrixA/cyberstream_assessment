@@ -5,8 +5,8 @@ const dialect_option =
 		? {}
 		: {
 				ssl: {
-					require: process.env.SSL,
-					rejectUnauthorized: true,
+					require: true,
+					rejectUnauthorized: false,
 				},
 			};
 
