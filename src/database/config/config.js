@@ -1,0 +1,29 @@
+require("dotenv").config();
+
+const dialect_option =
+	process.env.DB_HOSTED_MODE === "local"
+		? {}
+		: {
+				ssl: {
+					require: process.env.SSL,
+					rejectUnauthorized: true,
+				},
+			};
+
+module.exports = {
+	development: {
+		url: process.env.DB_DEV_URL,
+		dialect: "postgres",
+		dialectOptions: dialect_option,
+	},
+	test: {
+		url: process.env.DB_TEST_URL,
+		dialect: "postgres",
+		dialectOptions: dialect_option,
+	},
+	production: {
+		url: process.env.DB_PROD_URL,
+		dialect: "postgres",
+		dialectOptions: dialect_option,
+	},
+};

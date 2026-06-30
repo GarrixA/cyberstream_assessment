@@ -1,0 +1,59 @@
+name: build
+on:
+  push:
+    branches:
+      - develop
+      - "*"
+  pull_request:
+    branches:
+      - develop
+      - "*"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cyberstream-test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PORT: ${{ secrets.PORT }}
+      SERVER_URL: ${{ secrets.SERVER_URL }}
+      DEPLOYED_URL: ${{ secrets.DEPLOYED_URL }}
+      DB_TEST_URL: postgres://postgres:postgres@localhost:5432/cyberstream-test
+      DB_DEV_URL: ${{ secrets.DB_DEV_URL }}
+      DB_PROD_URL: ${{ secrets.DB_PROD_URL }}
+      DEV_MODE: test
+      DB_HOSTED_MODE: local
+      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+    strategy:
+      matrix:
+        node-version: ["20.x"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm run test
+      - name: Upload coverage to Coveralls
+        if: always()
+        continue-on-error: true
+        run: npx coveralls < coverage/lcov.info

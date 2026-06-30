@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "es2016",
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"rootDir": "./src",
+		"resolveJsonModule": true,
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"typeRoots": ["./node_modules/@types", "./types"],
+		"types": ["jest", "node"],
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist", "jest.setup.ts"],
+	"ts-node": {
+		"files": true
+	}
+}
